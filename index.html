@@ -20,6 +20,32 @@
       updateButtonUrls();
     }
   });
+
+  // Function to update starter plan URL
+  function updateStarterPlanUrl() {
+    const buttons = document.querySelectorAll('a[href^="https://buy.stripe.com"]');
+    buttons.forEach(button => {
+      // Find the starter plan button by checking its container text
+      if (button.closest('.elfsight-app-f0eac0df-a0ca-4f4e-b978-78dc393b6a7c') && 
+          button.closest('div').textContent.toLowerCase().includes('starter')) {
+        button.href = 'https://buy.stripe.com/28o5le9arcj09Hy3cc';
+      }
+    });
+  }
+
+  // Run after Elfsight app loads
+  const observer = new MutationObserver((mutations, obs) => {
+    const elfsightApp = document.querySelector('.elfsight-app-f0eac0df-a0ca-4f4e-b978-78dc393b6a7c');
+    if (elfsightApp && elfsightApp.children.length > 0) {
+      setTimeout(updateStarterPlanUrl, 1000); // Give time for Stripe buttons to load
+      obs.disconnect();
+    }
+  });
+
+  observer.observe(document, {
+    childList: true,
+    subtree: true
+  });
 </script>
 
 
